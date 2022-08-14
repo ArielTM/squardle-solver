@@ -11,6 +11,8 @@ takes into account the unique constraints this game adds.
 4. The solver will produce wordlists and letter matrix
 5. Repeat steps 2-4 after each guess
 
+![Squardle Solver Running](doc/squardle-solver.gif?raw=true "Squardle Solver Running")
+
 ## How Squardle Solver Works
 
 Squardle solver is written in Python. It takes the `smallSquares` variable (which holds the board state) as input and
