@@ -5,22 +5,64 @@ from tabulate import tabulate
 
 
 class SquardleState:
-
     def __init__(self, small_squares, is_three_words=True):
         self.is_daily = is_three_words
 
         self.passed_squares = [[1, 1], [3, 1], [1, 3], [3, 3]] if self.is_daily else []
 
         middle_wordlist = WORDLIST_3 if self.is_daily else WORDLIST
-        middle_letters = ['.'] if self.is_daily else POSSIBLE_LETTERS
-        self.possible_words_vertical = [WORDLIST, middle_wordlist, WORDLIST, middle_wordlist, WORDLIST]
-        self.possible_words_horizontal = [WORDLIST, middle_wordlist, WORDLIST, middle_wordlist, WORDLIST]
+        middle_letters = ["."] if self.is_daily else POSSIBLE_LETTERS
+        self.possible_words_vertical = [
+            WORDLIST,
+            middle_wordlist,
+            WORDLIST,
+            middle_wordlist,
+            WORDLIST,
+        ]
+        self.possible_words_horizontal = [
+            WORDLIST,
+            middle_wordlist,
+            WORDLIST,
+            middle_wordlist,
+            WORDLIST,
+        ]
         self.letters_matrix = [
-            [POSSIBLE_LETTERS, POSSIBLE_LETTERS, POSSIBLE_LETTERS, POSSIBLE_LETTERS, POSSIBLE_LETTERS],
-            [POSSIBLE_LETTERS, middle_letters, POSSIBLE_LETTERS, middle_letters, POSSIBLE_LETTERS],
-            [POSSIBLE_LETTERS, POSSIBLE_LETTERS, POSSIBLE_LETTERS, POSSIBLE_LETTERS, POSSIBLE_LETTERS],
-            [POSSIBLE_LETTERS, middle_letters, POSSIBLE_LETTERS, middle_letters, POSSIBLE_LETTERS],
-            [POSSIBLE_LETTERS, POSSIBLE_LETTERS, POSSIBLE_LETTERS, POSSIBLE_LETTERS, POSSIBLE_LETTERS]]
+            [
+                POSSIBLE_LETTERS,
+                POSSIBLE_LETTERS,
+                POSSIBLE_LETTERS,
+                POSSIBLE_LETTERS,
+                POSSIBLE_LETTERS,
+            ],
+            [
+                POSSIBLE_LETTERS,
+                middle_letters,
+                POSSIBLE_LETTERS,
+                middle_letters,
+                POSSIBLE_LETTERS,
+            ],
+            [
+                POSSIBLE_LETTERS,
+                POSSIBLE_LETTERS,
+                POSSIBLE_LETTERS,
+                POSSIBLE_LETTERS,
+                POSSIBLE_LETTERS,
+            ],
+            [
+                POSSIBLE_LETTERS,
+                middle_letters,
+                POSSIBLE_LETTERS,
+                middle_letters,
+                POSSIBLE_LETTERS,
+            ],
+            [
+                POSSIBLE_LETTERS,
+                POSSIBLE_LETTERS,
+                POSSIBLE_LETTERS,
+                POSSIBLE_LETTERS,
+                POSSIBLE_LETTERS,
+            ],
+        ]
 
         self.do_analysis(small_squares)
 
@@ -36,7 +78,9 @@ class SquardleState:
     def all_possible_words(self):
         wordlist_sum = 0
         for i in range(5):
-            wordlist_sum += len(self.possible_words_horizontal[i]) + len(self.possible_words_vertical[i])
+            wordlist_sum += len(self.possible_words_horizontal[i]) + len(
+                self.possible_words_vertical[i]
+            )
         return wordlist_sum
 
     def parse_small_squares(self, small_squares):
@@ -76,58 +120,79 @@ class SquardleState:
             raise Exception("No matching letter class")
 
     def set_green_horizontal(self, x, y, letter):
-        self.possible_words_horizontal[y] = self.apply_green_letter_to_wordlist(self.possible_words_horizontal[y],
-                                                                                letter, x)
+        self.possible_words_horizontal[y] = self.apply_green_letter_to_wordlist(
+            self.possible_words_horizontal[y], letter, x
+        )
 
     def set_green_vertical(self, x, y, letter):
-        self.possible_words_vertical[x] = self.apply_green_letter_to_wordlist(self.possible_words_vertical[x], letter,
-                                                                              y)
+        self.possible_words_vertical[x] = self.apply_green_letter_to_wordlist(
+            self.possible_words_vertical[x], letter, y
+        )
 
     def set_black_horizontal(self, x, y, letter, realblack=True):
-        self.possible_words_horizontal[y] = self.apply_black_letter_to_wordlist(self.possible_words_horizontal[y],
-                                                                                letter)
+        self.possible_words_horizontal[y] = self.apply_black_letter_to_wordlist(
+            self.possible_words_horizontal[y], letter
+        )
         if realblack:
             for i in range(len(self.possible_words_horizontal)):
-                self.possible_words_horizontal[i] = self.apply_positional_black_letter_to_wordlist(
-                    self.possible_words_horizontal[i], letter, x)
+                self.possible_words_horizontal[
+                    i
+                ] = self.apply_positional_black_letter_to_wordlist(
+                    self.possible_words_horizontal[i], letter, x
+                )
 
     def set_black_vertical(self, x, y, letter, realblack=True):
-        self.possible_words_vertical[x] = self.apply_black_letter_to_wordlist(self.possible_words_vertical[x], letter)
+        self.possible_words_vertical[x] = self.apply_black_letter_to_wordlist(
+            self.possible_words_vertical[x], letter
+        )
 
         if realblack:
             for i in range(len(self.possible_words_vertical)):
-                self.possible_words_vertical[i] = self.apply_positional_black_letter_to_wordlist(
-                    self.possible_words_vertical[i], letter, y)
+                self.possible_words_vertical[
+                    i
+                ] = self.apply_positional_black_letter_to_wordlist(
+                    self.possible_words_vertical[i], letter, y
+                )
 
     def set_yellow_horizontal(self, x, y, letter, realyellow=True):
-        self.possible_words_horizontal[y] = self.apply_yellow_letter_to_wordlist(self.possible_words_horizontal[y],
-                                                                                 letter, x)
+        self.possible_words_horizontal[y] = self.apply_yellow_letter_to_wordlist(
+            self.possible_words_horizontal[y], letter, x
+        )
 
         if realyellow:
             for i in range(len(self.possible_words_horizontal)):
                 if i == y:
                     continue
-                self.possible_words_horizontal[i] = self.apply_positional_black_letter_to_wordlist(
-                    self.possible_words_horizontal[i], letter, x)
+                self.possible_words_horizontal[
+                    i
+                ] = self.apply_positional_black_letter_to_wordlist(
+                    self.possible_words_horizontal[i], letter, x
+                )
 
     def set_yellow_vertical(self, x, y, letter, realyellow=True):
-        self.possible_words_vertical[x] = self.apply_yellow_letter_to_wordlist(self.possible_words_vertical[x],
-                                                                               letter, y)
+        self.possible_words_vertical[x] = self.apply_yellow_letter_to_wordlist(
+            self.possible_words_vertical[x], letter, y
+        )
 
         if realyellow:
             for i in range(len(self.possible_words_vertical)):
                 if i == x:
                     continue
-                self.possible_words_vertical[i] = self.apply_positional_black_letter_to_wordlist(
-                    self.possible_words_vertical[i], letter, y)
+                self.possible_words_vertical[
+                    i
+                ] = self.apply_positional_black_letter_to_wordlist(
+                    self.possible_words_vertical[i], letter, y
+                )
 
     def set_global_black(self, letter):
         for i in range(len(self.possible_words_horizontal)):
-            self.possible_words_horizontal[i] = self.apply_black_letter_to_wordlist(self.possible_words_horizontal[i],
-                                                                                    letter)
+            self.possible_words_horizontal[i] = self.apply_black_letter_to_wordlist(
+                self.possible_words_horizontal[i], letter
+            )
         for i in range(len(self.possible_words_vertical)):
-            self.possible_words_vertical[i] = self.apply_black_letter_to_wordlist(self.possible_words_vertical[i],
-                                                                                  letter)
+            self.possible_words_vertical[i] = self.apply_black_letter_to_wordlist(
+                self.possible_words_vertical[i], letter
+            )
 
     @staticmethod
     def apply_black_letter_to_wordlist(wordlist, letter):
@@ -140,7 +205,9 @@ class SquardleState:
     def apply_yellow_letter_to_wordlist(wordlist, letter, pos):
         if wordlist == []:
             return []
-        new_wordlist = [word for word in wordlist if letter in word and word[pos] != letter]
+        new_wordlist = [
+            word for word in wordlist if letter in word and word[pos] != letter
+        ]
         return new_wordlist
 
     @staticmethod
@@ -188,14 +255,16 @@ class SquardleState:
         for y, wordlist in enumerate(self.possible_words_horizontal):
             # if IS_DAILY and y in [1, 3]:
             #     continue
-            self.possible_words_horizontal[y] = self.apply_letters_list_on_wordlist(wordlist,
-                                                                                    [self.letters_matrix[i][y] for i in
-                                                                                     range(5)])
+            self.possible_words_horizontal[y] = self.apply_letters_list_on_wordlist(
+                wordlist, [self.letters_matrix[i][y] for i in range(5)]
+            )
 
         for x, wordlist in enumerate(self.possible_words_vertical):
             # if IS_DAILY and x in [1, 3]:
             #     continue
-            self.possible_words_vertical[x] = self.apply_letters_list_on_wordlist(wordlist, self.letters_matrix[x])
+            self.possible_words_vertical[x] = self.apply_letters_list_on_wordlist(
+                wordlist, self.letters_matrix[x]
+            )
 
     @staticmethod
     def apply_letters_list_on_wordlist(wordlist, letters_list):
@@ -210,14 +279,14 @@ class SquardleState:
         for words in self.possible_words_horizontal:
             if not words:
                 continue
-            wordlist = ', '.join(words[:30])
+            wordlist = ", ".join(words[:30])
             data += f"\t({len(words)}) {wordlist}\n"
 
         data += "Vertical:\n"
         for words in self.possible_words_vertical:
             if not words:
                 continue
-            wordlist = ', '.join(words[:30])
+            wordlist = ", ".join(words[:30])
             data += f"\t({len(words)}) {wordlist}\n"
 
         return data

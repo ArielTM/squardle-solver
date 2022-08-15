@@ -2,14 +2,14 @@ from squardle_state import SquardleState
 from json import loads
 
 
-def input_multiline(prompt=''):
+def input_multiline(prompt=""):
     if prompt:
         print(prompt)
 
     multiline_text = ""
     text = input()
     while text != "":
-        multiline_text += text + '\n'
+        multiline_text += text + "\n"
         text = input()
     return multiline_text
 
